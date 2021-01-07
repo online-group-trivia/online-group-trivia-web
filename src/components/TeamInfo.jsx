@@ -6,9 +6,12 @@ class TeamInfo extends React.Component {
   }
 
   render() {
-    const moves = this.props.players.map((player, move) => {
-      const desc = move ? "Go to move #" + move : "Go to game start";
-      return <li key={move}>{player}</li>;
+    const moves = this.props.players.map((player, i) => {
+      return (
+        <h1>
+          <span class="badge bg-secondary">{player}</span>
+        </h1>
+      );
     });
 
     return <ol>{moves}</ol>;
