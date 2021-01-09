@@ -5,13 +5,19 @@ import { useHistory } from "react-router-dom";
 function HomeComponent(props) {
   const history = useHistory();
   const createRoom = () => {
-    fetch("https://mockend.com/aedeny/online-group-trivia-web/posts/1")
-      .then()
+    const myHeaders = new Headers();
+    const myRequest = new Request("http://127.0.0.1:9631/create", {
+      method: "POST",
+      headers: myHeaders,
+      mode: "cors",
+      cache: "default",
+    });
+    fetch(myRequest)
       .then((response) => response.json())
       .then((data) => {
-        let id = data["roomUuid"];
+        let id = data["room_uuid"];
         console.log(id);
-        history.push(`/manage?roomUuid=${id}`);
+        history.push(`/manage?roomId=${id}`);
       });
   };
 

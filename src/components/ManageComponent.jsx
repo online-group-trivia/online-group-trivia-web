@@ -10,16 +10,54 @@ import Toast from "react-bootstrap/Toast";
 class ManageComponent extends React.Component {
   constructor(props) {
     super(props);
+    console.log("RoomId = " + props.roomId);
+
     this.state = {
       nextId: 1,
-      gameTitle: "",
-      roomUUid: "",
+      gameTitle: "Untitled Game",
       questions: [],
       showToast: false,
     };
+
     this.SaveOnServer = this.SaveOnServer.bind(this);
     this.closeToast = this.closeToast.bind(this);
   }
+
+  componentDidMount() {
+    this.getRoomDataFromServer();
+  }
+  getRoomDataFromServer() {
+    const myHeaders = new Headers({});
+    const myRequest = new Request(
+      `http://127.0.0.1:9631/manage?room_uuid=${this.props.roomId}`,
+      {
+        method: "GET",
+        headers: myHeaders,
+        mode: "cors",
+        cache: "default",
+      }
+    );
+
+    fetch(myRequest)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        const calculateNextId =
+          Math.max(0, ...data["questions"].slice().map((q) => q.id)) + 1;
+        this.setState({
+          gameTitle: data["title"],
+          questions: data["questions"],
+          nextId: calculateNextId,
+        });
+      })
+      .catch((err) => console.log(err));
+  }
+
+  saveRoomDataOnServer() {}
+
   // display form to fill questions
   // button to add the question
   // display the list of filled questions
@@ -49,22 +87,22 @@ class ManageComponent extends React.Component {
   }
 
   SaveOnServer() {
+    const myHeaders = new Headers({ "Content-Type": "application/json" });
     const myRequest = new Request(
-      "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita",
+      `http://127.0.0.1:9631/save?room_uuid=${this.props.roomId}`,
       {
-        method: "GET",
-        headers: new Headers(),
+        method: "PUT",
+        headers: myHeaders,
         mode: "cors",
         cache: "default",
+        body: JSON.stringify({
+          title: this.state.title,
+          questions: this.state.questions,
+        }),
       }
     );
 
-    fetch(myRequest)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        this.setState({ showToast: true });
-      });
+    fetch(myRequest).then(this.setState({ showToast: true }));
   }
 
   render() {
@@ -82,8 +120,7 @@ class ManageComponent extends React.Component {
       <Container>
         <Row>
           <Col>
-            {/* need to add an option to change the text */}
-            <h1>Untitled Game</h1>
+            <h1>{this.state.gameTitle}</h1>
           </Col>
         </Row>
         <Row>
