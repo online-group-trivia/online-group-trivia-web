@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import ManageComponent from "./components/ManageComponent";
+import AppComponent from "./AppComponent";
 import "bootstrap/dist/css/bootstrap.min.css";
 ReactDOM.render(
   <React.StrictMode>
-    <ManageComponent />
+    <AppComponent />
   </React.StrictMode>,
   document.getElementById("root")
 );

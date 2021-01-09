@@ -1,5 +1,3 @@
-// Button.stories.js
-
 import React from "react";
 import { QuestionComponent } from "../components/QuestionComponent";
 
@@ -8,5 +6,12 @@ export default {
   component: QuestionComponent,
 };
 
-const Template = (args) => <QuestionComponent question={"this"} />;
+const Template = (args) => <QuestionComponent {...args} />;
 export const Primary = Template.bind({});
+Primary.args = {
+  question: "this",
+};
+export const Secondary = Template.bind({});
+Secondary.args = {
+  question: "asodij oiasjd oasijd oasijd oaisj d?",
+};

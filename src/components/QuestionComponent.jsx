@@ -8,16 +8,21 @@ import Container from "react-bootstrap/Container";
 export class QuestionComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.handleRemove = this.handleRemove.bind(this);
+  }
+
+  handleRemove() {
+    this.props.onRemoveQuestion(this.props.question.id);
   }
   render() {
     return (
       <h1>
         <Badge variant="secondary">
-          <Container fluid>
+          <Container>
             <Row className="align-items-center">
-              <Col className="text-wrap">{this.props.question}</Col>
-              <Col sm={2}>
-                <Button variant="danger" block>
+              <Col className="text-wrap">{this.props.question.question}</Col>
+              <Col xs={2}>
+                <Button variant="danger" size="sm" onClick={this.handleRemove}>
                   X
                 </Button>
               </Col>

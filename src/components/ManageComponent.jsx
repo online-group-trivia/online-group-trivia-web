@@ -5,18 +5,20 @@ import AddQuestionComponent from "./AddQuestionComponent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import Toast from "react-bootstrap/Toast";
 class ManageComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      nextId: 1,
       gameTitle: "",
       roomUUid: "",
-      questions: [
-        "Is your Refrigerator running?",
-        "how much money for a pizza?",
-        "this is a very huge question so i write lost of text bla bla?",
-      ],
+      questions: [],
+      showToast: false,
     };
+    this.SaveOnServer = this.SaveOnServer.bind(this);
+    this.closeToast = this.closeToast.bind(this);
   }
   // display form to fill questions
   // button to add the question
@@ -26,15 +28,54 @@ class ManageComponent extends React.Component {
   // start the game option
 
   addQuestion(questionStr) {
-    // let myQuestions = this.state.questions.slice();
-    // myQuestions.push(questionStr)
+    console.log("Got question: " + questionStr);
+    let myQuestions = this.state.questions.slice();
+    myQuestions.push({ question: questionStr, id: this.state.nextId });
+    this.setState({ questions: myQuestions, nextId: this.state.nextId + 1 });
+  }
+
+  removeQuestion(id) {
+    console.log("Removing question: " + id);
+    let myQuestions = this.state.questions.slice();
+    const index = myQuestions.map((q) => q.id).indexOf(id);
+    if (index > -1) {
+      myQuestions.splice(index, 1);
+    }
+    this.setState({ questions: myQuestions });
+  }
+
+  closeToast() {
+    this.setState({ showToast: false });
+  }
+
+  SaveOnServer() {
+    const myRequest = new Request(
+      "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita",
+      {
+        method: "GET",
+        headers: new Headers(),
+        mode: "cors",
+        cache: "default",
+      }
+    );
+
+    fetch(myRequest)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        this.setState({ showToast: true });
+      });
   }
 
   render() {
-    // let myQuestions = this.state.questions.slice();
-
     const myQuestions = this.state.questions.slice().map((question, i) => {
-      return <QuestionComponent question={question}></QuestionComponent>;
+      return (
+        <QuestionComponent
+          onRemoveQuestion={(id) => this.removeQuestion(id)}
+          key={question.id}
+          question={question}
+        ></QuestionComponent>
+      );
     });
 
     return (
@@ -46,8 +87,21 @@ class ManageComponent extends React.Component {
           </Col>
         </Row>
         <Row>
+          <Col>
+            <Button onClick={this.SaveOnServer}>Save</Button>
+            <Toast
+              onClose={this.closeToast}
+              show={this.state.showToast}
+              delay={5000}
+              autohide
+            >
+              <Toast.Body>Data saved!</Toast.Body>
+            </Toast>
+          </Col>
+        </Row>
+        <Row>
           <Col sm={7}>
-            <AddQuestionComponent></AddQuestionComponent>
+            <AddQuestionComponent onAddQuestion={(q) => this.addQuestion(q)} />
           </Col>
           <Col sm={5}>
             <ol>{myQuestions}</ol>

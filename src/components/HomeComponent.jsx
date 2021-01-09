@@ -2,7 +2,7 @@ import React from "react";
 import "./HomeComponent.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-const HomeComponent = () => {
+function HomeComponent(props) {
   const history = useHistory();
   const createRoom = () => {
     fetch("https://mockend.com/aedeny/online-group-trivia-web/posts/1")
@@ -54,6 +54,6 @@ const HomeComponent = () => {
       </div>
     </div>
   );
-};
+}
 
 export default HomeComponent;
