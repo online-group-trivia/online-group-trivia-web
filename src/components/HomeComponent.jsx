@@ -1,7 +1,12 @@
 import React from "react";
 import "./HomeComponent.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Jumbotron from "react-bootstrap/Jumbotron";
+
 function HomeComponent(props) {
   const history = useHistory();
   const createRoom = () => {
@@ -11,6 +16,7 @@ function HomeComponent(props) {
       headers: myHeaders,
       mode: "cors",
       cache: "default",
+      body: JSON.stringify({ title: "My new trivia game!" }),
     });
     fetch(myRequest)
       .then((response) => response.json())
@@ -22,43 +28,37 @@ function HomeComponent(props) {
   };
 
   return (
-    <div className="jumbotron d-flex align-items-center min-vh-100">
-      <div className="container text-center">
-        <div className="row mb-4">
-          <div className="col-sm">
+    <Jumbotron className="white-background d-flex align-items-center min-vh-100 ">
+      <Container className="text-center">
+        <Row mb={4}>
+          <Col sm>
             <h1>Welcome to Group Trivia!</h1>
-          </div>
-        </div>
-        <div className="row mb-2">
-          <div className="col-sm">
+          </Col>
+        </Row>
+        <Row mb={2}>
+          <Col sm>
             <input
               type="email"
               className="form-control"
               id="exampleFormControlInput1"
               placeholder="Room ID"
             ></input>
-          </div>
-          <div className="col-sm">
-            <div className="d-grid">
-              <button type="button" className="btn btn-primary btn-block">
-                Connect
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col d-grid">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={createRoom}
-            >
+          </Col>
+          <Col sm>
+            <Button variant="primary" block>
+              Connect
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button variant="primary" onClick={createRoom}>
               or, Create a New Room
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    </Jumbotron>
   );
 }
 

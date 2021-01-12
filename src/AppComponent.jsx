@@ -3,16 +3,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useLocation,
 } from "react-router-dom";
 import HomeComponent from "./components/HomeComponent";
 import GameComponent from "./components/GameComponent";
 import ManageComponent from "./components/ManageComponent";
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 function Inner(params) {
   let query = new URLSearchParams(useLocation().search);

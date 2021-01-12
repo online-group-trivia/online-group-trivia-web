@@ -5,8 +5,10 @@ import AddQuestionComponent from "./AddQuestionComponent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Toast from "react-bootstrap/Toast";
+import LoadingScreenComponent from "./LoadingScreenComponent";
+import ServerErrorMessageComponent from "./ServerErrorMessageComponent";
+import EditableLabel from "react-inline-editing";
+
 class ManageComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -14,13 +16,17 @@ class ManageComponent extends React.Component {
 
     this.state = {
       nextId: 1,
-      gameTitle: "Untitled Game",
-      questions: [],
       showToast: false,
     };
 
     this.SaveOnServer = this.SaveOnServer.bind(this);
     this.closeToast = this.closeToast.bind(this);
+    this.handleFocusOut = this.handleFocusOut.bind(this);
+  }
+
+  handleFocusOut(text) {
+    this.setState({ gameTitle: text }, () => this.SaveOnServer());
+    console.log("Left editor with text: " + text);
   }
 
   componentDidMount() {
@@ -40,10 +46,17 @@ class ManageComponent extends React.Component {
 
     fetch(myRequest)
       .then((response) => {
+        if (!response.ok) {
+          this.setState({ requestStatus: response.status });
+          return;
+        }
         console.log(response);
         return response.json();
       })
       .then((data) => {
+        if (data === undefined) {
+          return;
+        }
         console.log(data);
         const calculateNextId =
           Math.max(0, ...data["questions"].slice().map((q) => q.id)) + 1;
@@ -51,12 +64,15 @@ class ManageComponent extends React.Component {
           gameTitle: data["title"],
           questions: data["questions"],
           nextId: calculateNextId,
+          requestStatus: "OK",
         });
+        document.title = "Group Trivia | " + this.state.gameTitle;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        this.setState({ requestStatus: "Server unreachable" });
+        return console.log(err);
+      });
   }
-
-  saveRoomDataOnServer() {}
 
   // display form to fill questions
   // button to add the question
@@ -69,7 +85,10 @@ class ManageComponent extends React.Component {
     console.log("Got question: " + questionStr);
     let myQuestions = this.state.questions.slice();
     myQuestions.push({ question: questionStr, id: this.state.nextId });
-    this.setState({ questions: myQuestions, nextId: this.state.nextId + 1 });
+    this.setState(
+      { questions: myQuestions, nextId: this.state.nextId + 1 },
+      () => this.SaveOnServer()
+    );
   }
 
   removeQuestion(id) {
@@ -79,7 +98,7 @@ class ManageComponent extends React.Component {
     if (index > -1) {
       myQuestions.splice(index, 1);
     }
-    this.setState({ questions: myQuestions });
+    this.setState({ questions: myQuestions }, () => this.SaveOnServer());
   }
 
   closeToast() {
@@ -96,7 +115,7 @@ class ManageComponent extends React.Component {
         mode: "cors",
         cache: "default",
         body: JSON.stringify({
-          title: this.state.title,
+          title: this.state.gameTitle,
           questions: this.state.questions,
         }),
       }
@@ -106,6 +125,12 @@ class ManageComponent extends React.Component {
   }
 
   render() {
+    if (this.state.requestStatus === undefined) {
+      return <LoadingScreenComponent />;
+    }
+    if (this.state.requestStatus !== "OK") {
+      return <ServerErrorMessageComponent msg={this.state.requestStatus} />;
+    }
     const myQuestions = this.state.questions.slice().map((question, i) => {
       return (
         <QuestionComponent
@@ -120,20 +145,17 @@ class ManageComponent extends React.Component {
       <Container>
         <Row>
           <Col>
-            <h1>{this.state.gameTitle}</h1>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button onClick={this.SaveOnServer}>Save</Button>
-            <Toast
-              onClose={this.closeToast}
-              show={this.state.showToast}
-              delay={5000}
-              autohide
-            >
-              <Toast.Body>Data saved!</Toast.Body>
-            </Toast>
+            <h1>
+              <EditableLabel
+                text={this.state.gameTitle}
+                inputWidth="500px"
+                inputHeight="50px"
+                inputMaxLength="50"
+                labelFontWeight="bold"
+                inputFontWeight="bold"
+                onFocusOut={this.handleFocusOut}
+              />
+            </h1>
           </Col>
         </Row>
         <Row>

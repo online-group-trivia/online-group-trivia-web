@@ -4,10 +4,6 @@ import React from "react";
 // const TeamInfo = React.lazy(() => import("./TeamInfo"));
 import TeamInfo from "./TeamInfo.jsx";
 class GameComponent extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const myHeaders = new Headers();
     const myRequest = new Request(

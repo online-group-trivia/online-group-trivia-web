@@ -19,6 +19,7 @@ export class AddQuestionComponent extends React.Component {
 
   handleAdd() {
     this.props.onAddQuestion(this.state.value);
+    this.questionInput.focus();
     this.setState({ value: "" });
   }
 
@@ -32,6 +33,9 @@ export class AddQuestionComponent extends React.Component {
         <label htmlFor="questionForm-url">Please enter your question:</label>
         <InputGroup>
           <FormControl
+            ref={(questionInput) => {
+              this.questionInput = questionInput;
+            }}
             id="questionForm"
             placeholder="How many dogs does John have?"
             onChange={this.handleChange}
