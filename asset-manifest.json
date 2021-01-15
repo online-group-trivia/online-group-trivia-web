@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/online-group-trivia-web/static/css/main.92ab5a72.chunk.css",
-    "main.js": "/online-group-trivia-web/static/js/main.d3bcb748.chunk.js",
-    "main.js.map": "/online-group-trivia-web/static/js/main.d3bcb748.chunk.js.map",
+    "main.css": "/online-group-trivia-web/static/css/main.b3240b9e.chunk.css",
+    "main.js": "/online-group-trivia-web/static/js/main.efe75fdf.chunk.js",
+    "main.js.map": "/online-group-trivia-web/static/js/main.efe75fdf.chunk.js.map",
     "runtime-main.js": "/online-group-trivia-web/static/js/runtime-main.e1b84d9f.js",
     "runtime-main.js.map": "/online-group-trivia-web/static/js/runtime-main.e1b84d9f.js.map",
     "static/css/2.ae9f1eb3.chunk.css": "/online-group-trivia-web/static/css/2.ae9f1eb3.chunk.css",
-    "static/js/2.baf72e5c.chunk.js": "/online-group-trivia-web/static/js/2.baf72e5c.chunk.js",
-    "static/js/2.baf72e5c.chunk.js.map": "/online-group-trivia-web/static/js/2.baf72e5c.chunk.js.map",
+    "static/js/2.186434a0.chunk.js": "/online-group-trivia-web/static/js/2.186434a0.chunk.js",
+    "static/js/2.186434a0.chunk.js.map": "/online-group-trivia-web/static/js/2.186434a0.chunk.js.map",
     "static/js/3.5168b52d.chunk.js": "/online-group-trivia-web/static/js/3.5168b52d.chunk.js",
     "static/js/3.5168b52d.chunk.js.map": "/online-group-trivia-web/static/js/3.5168b52d.chunk.js.map",
     "index.html": "/online-group-trivia-web/index.html",
     "static/css/2.ae9f1eb3.chunk.css.map": "/online-group-trivia-web/static/css/2.ae9f1eb3.chunk.css.map",
-    "static/css/main.92ab5a72.chunk.css.map": "/online-group-trivia-web/static/css/main.92ab5a72.chunk.css.map",
-    "static/js/2.baf72e5c.chunk.js.LICENSE.txt": "/online-group-trivia-web/static/js/2.baf72e5c.chunk.js.LICENSE.txt",
+    "static/css/main.b3240b9e.chunk.css.map": "/online-group-trivia-web/static/css/main.b3240b9e.chunk.css.map",
+    "static/js/2.186434a0.chunk.js.LICENSE.txt": "/online-group-trivia-web/static/js/2.186434a0.chunk.js.LICENSE.txt",
     "static/media/404.dcdfb1bb.png": "/online-group-trivia-web/static/media/404.dcdfb1bb.png",
     "static/media/evil-morty.af079507.jpg": "/online-group-trivia-web/static/media/evil-morty.af079507.jpg",
     "static/media/rnm.a218ca22.png": "/online-group-trivia-web/static/media/rnm.a218ca22.png"
@@ -21,8 +21,8 @@
   "entrypoints": [
     "static/js/runtime-main.e1b84d9f.js",
     "static/css/2.ae9f1eb3.chunk.css",
-    "static/js/2.baf72e5c.chunk.js",
-    "static/css/main.92ab5a72.chunk.css",
-    "static/js/main.d3bcb748.chunk.js"
+    "static/js/2.186434a0.chunk.js",
+    "static/css/main.b3240b9e.chunk.css",
+    "static/js/main.efe75fdf.chunk.js"
   ]
 }
