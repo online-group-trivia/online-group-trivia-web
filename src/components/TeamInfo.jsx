@@ -5,12 +5,17 @@ class TeamInfo extends React.Component {
     const moves = this.props.players.map((player, i) => {
       return (
         <h1>
-          <span class="badge bg-secondary">{player}</span>
+          <span className="badge bg-secondary">{player}</span>
         </h1>
       );
     });
 
-    return <ol>{moves}</ol>;
+    return (
+      <div className="text-center ">
+        <h2>{this.props.teamName}</h2>
+        <ol>{moves}</ol>
+      </div>
+    );
   }
 }
 

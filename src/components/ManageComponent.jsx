@@ -35,7 +35,7 @@ class ManageComponent extends React.Component {
   getRoomDataFromServer() {
     const myHeaders = new Headers({});
     const myRequest = new Request(
-      `http://127.0.0.1:9631/manage?room_uuid=${this.props.roomId}`,
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?room_uuid=${this.props.roomId}`,
       {
         method: "GET",
         headers: myHeaders,
@@ -108,7 +108,7 @@ class ManageComponent extends React.Component {
   SaveOnServer() {
     const myHeaders = new Headers({ "Content-Type": "application/json" });
     const myRequest = new Request(
-      `http://127.0.0.1:9631/save?room_uuid=${this.props.roomId}`,
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?room_uuid=${this.props.roomId}`,
       {
         method: "PUT",
         headers: myHeaders,

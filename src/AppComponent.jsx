@@ -27,7 +27,7 @@ function Inner(params) {
 }
 export default function AppComponent() {
   return (
-    <Router>
+    <Router basename="/online-group-trivia-web">
       <Inner />
     </Router>
   );

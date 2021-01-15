@@ -31,13 +31,13 @@ class GameComponent extends React.Component {
           <div class="container">
             <div class="row">
               <div class="col-sm">
-                <TeamInfo players={["Eden", "Yardena"]}></TeamInfo>
+                <TeamInfo teamName={"Team A"} players={["Player 1", "Player 2"]}></TeamInfo>
               </div>
               <div class="col-sm">
                 <img src={logo} className="App-logo" alt="logo" />
               </div>
               <div class="col-sm">
-                <TeamInfo players={["Dan", "Barak"]}></TeamInfo>
+                <TeamInfo teamName={"Team B"} players={["Player 3", "Player 4"]}></TeamInfo>
               </div>
             </div>
           </div>

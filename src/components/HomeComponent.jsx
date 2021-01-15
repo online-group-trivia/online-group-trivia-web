@@ -11,13 +11,16 @@ function HomeComponent(props) {
   const history = useHistory();
   const createRoom = () => {
     const myHeaders = new Headers();
-    const myRequest = new Request("http://127.0.0.1:9631/create", {
-      method: "POST",
-      headers: myHeaders,
-      mode: "cors",
-      cache: "default",
-      body: JSON.stringify({ title: "My new trivia game!" }),
-    });
+    const myRequest = new Request(
+      process.env.REACT_APP_BACKEND_HOSTNAME + "/create",
+      {
+        method: "POST",
+        headers: myHeaders,
+        mode: "cors",
+        cache: "default",
+        body: JSON.stringify({ title: "My new trivia game!" }),
+      }
+    );
     fetch(myRequest)
       .then((response) => response.json())
       .then((data) => {
@@ -28,8 +31,8 @@ function HomeComponent(props) {
   };
 
   return (
-    <Jumbotron className="white-background d-flex align-items-center min-vh-100 ">
-      <Container className="text-center">
+    <Jumbotron className="white-background d-flex align-items-center min-vh-100">
+      <Container className="text-center overflow-hidden">
         <Row mb={4}>
           <Col sm>
             <h1>Welcome to Group Trivia!</h1>
