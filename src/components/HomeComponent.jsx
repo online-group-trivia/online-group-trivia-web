@@ -10,7 +10,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 function HomeComponent(props) {
   const history = useHistory();
   const createRoom = () => {
-    const myHeaders = new Headers();
+    const myHeaders = new Headers({ "content-type": "application/json" });
     const myRequest = new Request(
       process.env.REACT_APP_BACKEND_HOSTNAME + "/create",
       {
@@ -24,7 +24,7 @@ function HomeComponent(props) {
     fetch(myRequest)
       .then((response) => response.json())
       .then((data) => {
-        let id = data["room_uuid"];
+        let id = data["id"];
         console.log(id);
         history.push(`/manage?roomId=${id}`);
       });
