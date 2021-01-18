@@ -14,7 +14,7 @@ function Inner(params) {
   return (
     <Switch>
       <Route exact path="/">
-        <ManageComponent />
+        <HomeComponent />
       </Route>
       <Route path="/manage">
         <ManageComponent roomId={query.get("roomId")} />
