@@ -19,11 +19,11 @@ function SomethingWentWrong(params) {
       className="d-flex align-items-center min-vh-100"
       style={{ backgroundColor: "white" }}
     >
-      <Container className="text-center">
+      <Container className="text-center" fluid>
         <div>
           <h1>Oops... Something went wrong</h1>
           <p>{params.msg}</p>
-          <img src={image} alt=""></img>
+          <Image src={image} alt="" fluid></Image>
         </div>
       </Container>
     </Jumbotron>
