@@ -2,6 +2,8 @@ import image from "../assets/evil-morty.jpg";
 import notFound from "../assets/404.png";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
+
 
 function ServerErrorMessageComponent(params) {
   if (params.msg === 404) {
@@ -32,12 +34,12 @@ function NotFound(params) {
   return (
     <Jumbotron
       className="d-flex align-items-center min-vh-100"
-      style={{ backgroundColor: "white" }}
+      style={{ backgroundColor: "rgb(29,33,36)" }}
     >
       <Container className="text-center">
         <div>
-          <h1>This room doesn't exist</h1>
-          <img src={notFound} alt=""></img>
+          <h1 class="text-white" >This room does not exist</h1>
+          <Image src={notFound} fluid></Image>
         </div>
       </Container>
     </Jumbotron>
