@@ -4,7 +4,6 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
 
-
 function ServerErrorMessageComponent(params) {
   if (params.msg === 404) {
     return <NotFound />;
@@ -38,7 +37,7 @@ function NotFound(params) {
     >
       <Container className="text-center">
         <div>
-          <h1 class="text-white" >This room does not exist</h1>
+          <h1 class="text-white">This game does not exist.</h1>
           <Image src={notFound} fluid></Image>
         </div>
       </Container>

@@ -12,15 +12,16 @@ export class QuestionComponent extends React.Component {
   }
 
   handleRemove() {
-    this.props.onRemoveQuestion(this.props.question.id);
+    this.props.onRemoveQuestion(this.props.question);
   }
+
   render() {
     return (
       <h1>
         <Badge variant="secondary">
           <Container>
             <Row className="align-items-center">
-              <Col className="text-wrap">{this.props.question.question}</Col>
+              <Col className="text-wrap">{this.props.question}</Col>
               <Col xs={2}>
                 <Button variant="danger" size="sm" onClick={this.handleRemove}>
                   X

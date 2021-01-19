@@ -12,10 +12,7 @@ import EditableLabel from "react-inline-editing";
 class ManageComponent extends React.Component {
   constructor(props) {
     super(props);
-    console.log("RoomId = " + props.roomId);
-
     this.state = {
-      nextId: 1,
       showToast: false,
     };
 
@@ -30,12 +27,13 @@ class ManageComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.getRoomDataFromServer();
+    this.getGameDataFromServer();
   }
-  getRoomDataFromServer() {
+
+  getGameDataFromServer() {
     const myHeaders = new Headers({});
     const myRequest = new Request(
-      `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?room_uuid=${this.props.roomId}`,
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?gameId=${this.props.gameId}`,
       {
         method: "GET",
         headers: myHeaders,
@@ -58,12 +56,9 @@ class ManageComponent extends React.Component {
           return;
         }
         console.log(data);
-        const calculateNextId =
-          Math.max(0, ...data["questions"].slice().map((q) => q.id)) + 1;
         this.setState({
           gameTitle: data["title"],
           questions: data["questions"],
-          nextId: calculateNextId,
           requestStatus: "OK",
         });
         document.title = "Group Trivia | " + this.state.gameTitle;
@@ -84,17 +79,14 @@ class ManageComponent extends React.Component {
   addQuestion(questionStr) {
     console.log("Got question: " + questionStr);
     let myQuestions = this.state.questions.slice();
-    myQuestions.push({ question: questionStr, id: this.state.nextId });
-    this.setState(
-      { questions: myQuestions, nextId: this.state.nextId + 1 },
-      () => this.SaveOnServer()
-    );
+    myQuestions.push(questionStr);
+    this.setState({ questions: myQuestions }, () => this.SaveOnServer());
   }
 
-  removeQuestion(id) {
-    console.log("Removing question: " + id);
+  removeQuestion(question) {
+    console.log("Removing question: " + question);
     let myQuestions = this.state.questions.slice();
-    const index = myQuestions.map((q) => q.id).indexOf(id);
+    const index = myQuestions.indexOf(question);
     if (index > -1) {
       myQuestions.splice(index, 1);
     }
@@ -108,7 +100,7 @@ class ManageComponent extends React.Component {
   SaveOnServer() {
     const myHeaders = new Headers({ "Content-Type": "application/json" });
     const myRequest = new Request(
-      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?room_uuid=${this.props.roomId}`,
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save`,
       {
         method: "PUT",
         headers: myHeaders,
@@ -117,6 +109,7 @@ class ManageComponent extends React.Component {
         body: JSON.stringify({
           title: this.state.gameTitle,
           questions: this.state.questions,
+          id: this.props.gameId,
         }),
       }
     );
@@ -131,11 +124,11 @@ class ManageComponent extends React.Component {
     if (this.state.requestStatus !== "OK") {
       return <ServerErrorMessageComponent msg={this.state.requestStatus} />;
     }
-    const myQuestions = this.state.questions.slice().map((question, i) => {
+    const myQuestions = this.state.questions.slice().map((question) => {
       return (
         <QuestionComponent
-          onRemoveQuestion={(id) => this.removeQuestion(id)}
-          key={question.id}
+          onRemoveQuestion={(question) => this.removeQuestion(question)}
+          key={question}
           question={question}
         ></QuestionComponent>
       );

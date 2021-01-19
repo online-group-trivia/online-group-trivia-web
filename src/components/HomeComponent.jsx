@@ -9,7 +9,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 
 function HomeComponent(props) {
   const history = useHistory();
-  const createRoom = () => {
+  const createGame = () => {
     const myHeaders = new Headers({ "content-type": "application/json" });
     const myRequest = new Request(
       process.env.REACT_APP_BACKEND_HOSTNAME + "/create",
@@ -26,7 +26,7 @@ function HomeComponent(props) {
       .then((data) => {
         let id = data["id"];
         console.log(id);
-        history.push(`/manage?roomId=${id}`);
+        history.push(`/manage?gameId=${id}`);
       });
   };
 
@@ -44,7 +44,7 @@ function HomeComponent(props) {
               type="email"
               className="form-control"
               id="exampleFormControlInput1"
-              placeholder="Room ID"
+              placeholder="Game ID"
             ></input>
           </Col>
           <Col sm>
@@ -55,8 +55,8 @@ function HomeComponent(props) {
         </Row>
         <Row>
           <Col>
-            <Button variant="primary" onClick={createRoom}>
-              or, Create a New Room
+            <Button variant="primary" onClick={createGame}>
+              or, Create a New Game
             </Button>
           </Col>
         </Row>

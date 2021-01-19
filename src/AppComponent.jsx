@@ -17,7 +17,7 @@ function Inner(params) {
         <HomeComponent />
       </Route>
       <Route path="/manage">
-        <ManageComponent roomId={query.get("roomId")} />
+        <ManageComponent gameId={query.get("gameId")} />
       </Route>
       <Route path="/play">
         <GameComponent />
