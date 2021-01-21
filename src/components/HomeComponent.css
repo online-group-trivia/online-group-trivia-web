@@ -5,3 +5,15 @@
 .jumbotron {
   margin-bottom: 0 !important;
 }
+/* https://stackoverflow.com/questions/28261287/how-to-change-btn-color-in-bootstrap */
+.btn-yardena,
+.btn-yardena:hover {
+  color: #ffffff !important;
+  background-color: #594d9c !important;
+  border-color: #5e4a8d !important;
+}
+
+.btn-yardena:focus,
+.btn-yardena.focus {
+  box-shadow: 0 0 0 0.2rem #d173e280 !important;
+}

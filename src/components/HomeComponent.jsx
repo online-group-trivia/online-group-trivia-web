@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import Form from "react-bootstrap/Form";
 
 function HomeComponent(props) {
   const history = useHistory();
@@ -38,24 +39,32 @@ function HomeComponent(props) {
             <h1>Welcome to Group Trivia!</h1>
           </Col>
         </Row>
-        <Row mb={2}>
-          <Col sm>
-            <input
-              type="email"
-              className="form-control"
-              id="exampleFormControlInput1"
-              placeholder="Game ID"
-            ></input>
-          </Col>
-          <Col sm>
+        <Row className="justify-content-center p-3">
+          <Form.Group as={Col} sm={4}>
+            <Form.Control type="text" placeholder="Room ID" name="game id" />
+            <br />
+            <Form.Control
+              type="text"
+              placeholder="Your Nickname"
+              name="nickname"
+            />
+          </Form.Group>
+          {/* <Col sm className="my-auto p-3">
             <Button variant="primary" block>
               Connect
             </Button>
+          </Col> */}
+        </Row>
+        <Row className="justify-content-center">
+          <Col sm={2}>
+            <Button variant="primary" block>
+              Join a Room
+            </Button>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Button variant="primary" onClick={createGame}>
+        <Row className="justify-content-center">
+          <Col sm={3}>
+            <Button variant="yardena" block onClick={createGame}>
               or, Create a New Game
             </Button>
           </Col>
