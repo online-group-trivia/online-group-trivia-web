@@ -25,7 +25,7 @@ function HomeComponent(props) {
     fetch(myRequest)
       .then((response) => response.json())
       .then((data) => {
-        let id = data["id"];
+        let id = data["_id"];
         console.log(id);
         history.push(`/manage?gameId=${id}`);
       });

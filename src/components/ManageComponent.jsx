@@ -16,13 +16,19 @@ class ManageComponent extends React.Component {
       showToast: false,
     };
 
-    this.SaveOnServer = this.SaveOnServer.bind(this);
+    this.SaveOnServer = this.saveOnServer.bind(this);
     this.closeToast = this.closeToast.bind(this);
     this.handleFocusOut = this.handleFocusOut.bind(this);
   }
 
   handleFocusOut(text) {
-    this.setState({ gameTitle: text }, () => this.SaveOnServer());
+    this.setState({ gameTitle: text }, () =>
+      this.saveOnServer({
+        ChangeTitle: {
+          title: text,
+        },
+      })
+    );
     console.log("Left editor with text: " + text);
   }
 
@@ -80,7 +86,13 @@ class ManageComponent extends React.Component {
     console.log("Got question: " + questionStr);
     let myQuestions = this.state.questions.slice();
     myQuestions.push(questionStr);
-    this.setState({ questions: myQuestions }, () => this.SaveOnServer());
+    this.setState({ questions: myQuestions }, () =>
+      this.saveOnServer({
+        AddQuestion: {
+          question: questionStr,
+        },
+      })
+    );
   }
 
   removeQuestion(question) {
@@ -90,27 +102,29 @@ class ManageComponent extends React.Component {
     if (index > -1) {
       myQuestions.splice(index, 1);
     }
-    this.setState({ questions: myQuestions }, () => this.SaveOnServer());
+    this.setState({ questions: myQuestions }, () =>
+      this.saveOnServer({
+        RemoveQuestion: {
+          question: question,
+        },
+      })
+    );
   }
 
   closeToast() {
     this.setState({ showToast: false });
   }
 
-  SaveOnServer() {
+  saveOnServer(data) {
     const myHeaders = new Headers({ "Content-Type": "application/json" });
     const myRequest = new Request(
-      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save`,
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?gameId=${this.props.gameId}`,
       {
         method: "PUT",
         headers: myHeaders,
         mode: "cors",
         cache: "default",
-        body: JSON.stringify({
-          title: this.state.gameTitle,
-          questions: this.state.questions,
-          id: this.props.gameId,
-        }),
+        body: JSON.stringify(data),
       }
     );
 
