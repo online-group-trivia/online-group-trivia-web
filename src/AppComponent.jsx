@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import HomeComponent from "./components/HomeComponent";
 import GameComponent from "./components/GameComponent";
-import ManageComponent from "./components/ManageComponent";
+import ManageComponent from "./components/manage/ManageComponent";
 
 function Inner(params) {
   let query = new URLSearchParams(useLocation().search);

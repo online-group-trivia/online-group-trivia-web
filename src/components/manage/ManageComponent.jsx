@@ -1,13 +1,16 @@
 import React from "react";
 import "./ManageComponent.css";
-import QuestionComponent from "./QuestionComponent";
+import QuestionComponent from "../QuestionComponent";
 import AddQuestionComponent from "./AddQuestionComponent";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import LoadingScreenComponent from "./LoadingScreenComponent";
-import ServerErrorMessageComponent from "./ServerErrorMessageComponent";
+import LoadingScreenComponent from "../LoadingScreenComponent";
+import ServerErrorMessageComponent from "../ServerErrorMessageComponent";
 import EditableLabel from "react-inline-editing";
+
+import { useSelector, useDispatch } from "react-redux";
+import { addQuestion, removeQuestion } from "./manageSlice";
 
 class ManageComponent extends React.Component {
   constructor(props) {
