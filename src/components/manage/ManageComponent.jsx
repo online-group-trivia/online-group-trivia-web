@@ -29,7 +29,7 @@ export function ManageComponent(props) {
   useEffect(getGameDataFromServer, []);
 
   function changeTitleInStore(text) {
-    dispatch(changeTitle());
+    dispatch(changeTitle(text));
     console.log("Left editor with text: " + text);
   }
 
@@ -100,7 +100,9 @@ export function ManageComponent(props) {
               inputMaxLength="50"
               labelFontWeight="bold"
               inputFontWeight="bold"
-              onFocusOut={() => changeTitleInStore()}
+              onFocusOut={(textAfterChange) =>
+                changeTitleInStore(textAfterChange)
+              }
             />
           </h1>
         </Col>
