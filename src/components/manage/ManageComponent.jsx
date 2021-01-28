@@ -97,7 +97,7 @@ export function ManageComponent(props) {
               text={title}
               inputWidth="500px"
               inputHeight="50px"
-              inputMaxLength="50"
+              inputMaxLength={50}
               labelFontWeight="bold"
               inputFontWeight="bold"
               onFocusOut={(textAfterChange) =>
