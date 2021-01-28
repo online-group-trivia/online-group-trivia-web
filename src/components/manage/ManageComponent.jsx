@@ -44,10 +44,6 @@ export function ManageComponent(props) {
         `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?gameId=${props.gameId}`
       )
       .then((response) => {
-        if (response.statusText !== "OK") {
-          setRequestStatus(response.status);
-          return;
-        }
         if (response.data === undefined) {
           return;
         }
@@ -61,9 +57,12 @@ export function ManageComponent(props) {
         setRequestStatus("OK");
         document.title = "Group Trivia | " + title;
       })
-      .catch((err) => {
-        setRequestStatus("Server unreachable");
-        return console.log(err);
+      .catch((error) => {
+        if (error.response) {
+          setRequestStatus(error.response.status);
+        } else if (error.request) {
+          setRequestStatus("Server unreachable");
+        }
       });
   }
 

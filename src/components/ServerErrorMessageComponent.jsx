@@ -37,7 +37,7 @@ function NotFound(params) {
     >
       <Container className="text-center">
         <div>
-          <h1 class="text-white">This game does not exist.</h1>
+          <h1 className="text-white">This game does not exist.</h1>
           <Image src={notFound} fluid></Image>
         </div>
       </Container>
