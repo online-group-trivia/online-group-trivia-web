@@ -17,6 +17,7 @@ import {
   selectTitle,
   selectQuestions,
   setInitialState,
+  selectgameId,
 } from "./manageSlice";
 import React, { useState, useEffect } from "react";
 export function ManageComponent(props) {
@@ -24,18 +25,37 @@ export function ManageComponent(props) {
   const dispatch = useDispatch();
 
   const title = useSelector(selectTitle);
+  const gameId = useSelector(selectgameId);
   const questions = useSelector(selectQuestions);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(getGameDataFromServer, []);
 
   function changeTitleInStore(text) {
-    dispatch(changeTitle(text));
+    saveOnServer({
+      ChangeTitle: {
+        title: text,
+      },
+    }).then(() => dispatch(changeTitle(text)));
     console.log("Left editor with text: " + text);
   }
 
   function addQuestionToStore(questionStr) {
     console.log("Got question: " + questionStr);
-    dispatch(addQuestion(questionStr));
+    let tempSet = new Set(questions);
+    if (!tempSet.has(questionStr)) {
+      saveOnServer({
+        AddQuestion: {
+          question: questionStr,
+        },
+      }).then(() => dispatch(addQuestion(questionStr)));
+    }
+  }
+
+  async function saveOnServer(data) {
+    await axios.put(
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?gameId=${gameId}`,
+      data
+    );
   }
 
   function getGameDataFromServer() {
@@ -66,9 +86,13 @@ export function ManageComponent(props) {
       });
   }
 
-  function removeQuestionToStore(question) {
+  function removeQuestionFromStore(question) {
+    saveOnServer({
+      RemoveQuestion: {
+        question: question,
+      },
+    }).then(() => dispatch(removeQuestion(question)));
     console.log("Removing question: " + question);
-    dispatch(removeQuestion(question));
   }
 
   if (requestStatus === undefined) {
@@ -80,7 +104,7 @@ export function ManageComponent(props) {
   const myQuestions = questions.slice().map((question) => {
     return (
       <QuestionComponent
-        onRemoveQuestion={(question) => removeQuestionToStore(question)}
+        onRemoveQuestion={(question) => removeQuestionFromStore(question)}
         key={question}
         question={question}
       ></QuestionComponent>
