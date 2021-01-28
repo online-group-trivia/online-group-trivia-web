@@ -7,25 +7,17 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Form from "react-bootstrap/Form";
+import axios from "axios";
 
 function HomeComponent(props) {
   const history = useHistory();
   const createGame = () => {
-    const myHeaders = new Headers({ "content-type": "application/json" });
-    const myRequest = new Request(
-      process.env.REACT_APP_BACKEND_HOSTNAME + "/create",
-      {
-        method: "POST",
-        headers: myHeaders,
-        mode: "cors",
-        cache: "default",
-        body: JSON.stringify({ title: "My new trivia game!" }),
-      }
-    );
-    fetch(myRequest)
-      .then((response) => response.json())
-      .then((data) => {
-        let id = data["_id"];
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/create`, {
+        title: "My new trivia game!",
+      })
+      .then((response) => {
+        let id = response.data["_id"];
         console.log(id);
         history.push(`/manage?gameId=${id}`);
       });

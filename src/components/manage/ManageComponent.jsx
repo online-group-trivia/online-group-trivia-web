@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import LoadingScreenComponent from "../LoadingScreenComponent";
 import ServerErrorMessageComponent from "../ServerErrorMessageComponent";
 import EditableLabel from "react-inline-editing";
+import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -38,34 +39,23 @@ export function ManageComponent(props) {
   }
 
   function getGameDataFromServer() {
-    const myHeaders = new Headers({});
-    const myRequest = new Request(
-      `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?gameId=${props.gameId}`,
-      {
-        method: "GET",
-        headers: myHeaders,
-        mode: "cors",
-        cache: "default",
-      }
-    );
-
-    return fetch(myRequest)
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?gameId=${props.gameId}`
+      )
       .then((response) => {
-        if (!response.ok) {
+        if (response.statusText !== "OK") {
           setRequestStatus(response.status);
           return;
         }
-        return response.json();
-      })
-      .then((data) => {
-        if (data === undefined) {
+        if (response.data === undefined) {
           return;
         }
         dispatch(
           setInitialState({
-            title: data["title"],
+            title: response.data["title"],
             gameId: props.gameId,
-            questions: data["questions"],
+            questions: response.data["questions"],
           })
         );
         setRequestStatus("OK");
@@ -76,6 +66,7 @@ export function ManageComponent(props) {
         return console.log(err);
       });
   }
+
   function removeQuestionToStore(question) {
     console.log("Removing question: " + question);
     dispatch(removeQuestion(question));

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 export const manageSlice = createSlice({
   name: "manage",
@@ -57,20 +58,11 @@ export const manageSlice = createSlice({
   },
 });
 
-function saveOnServer(data, gameId) {
-  const myHeaders = new Headers({ "Content-Type": "application/json" });
-  const myRequest = new Request(
+async function saveOnServer(data, gameId) {
+  await axios.put(
     `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?gameId=${gameId}`,
-    {
-      method: "PUT",
-      headers: myHeaders,
-      mode: "cors",
-      cache: "default",
-      body: JSON.stringify(data),
-    }
+    data
   );
-
-  fetch(myRequest);
 }
 
 export const {
