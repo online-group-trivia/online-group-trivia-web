@@ -113,30 +113,28 @@ export function ManageComponent(props) {
 
   return (
     <Container>
+      <Row className="justify-content-md-center">
+        <h1>
+          <EditableLabel
+            text={title}
+            inputWidth="500px"
+            inputHeight="50px"
+            inputMaxLength={50}
+            labelFontWeight="bold"
+            inputFontWeight="bold"
+            onFocusOut={(textAfterChange) =>
+              changeTitleInStore(textAfterChange)
+            }
+          />
+        </h1>
+      </Row>
       <Row>
         <Col>
-          <h1>
-            <EditableLabel
-              text={title}
-              inputWidth="500px"
-              inputHeight="50px"
-              inputMaxLength={50}
-              labelFontWeight="bold"
-              inputFontWeight="bold"
-              onFocusOut={(textAfterChange) =>
-                changeTitleInStore(textAfterChange)
-              }
-            />
-          </h1>
+          <AddQuestionComponent onAddQuestion={(q) => addQuestionToStore(q)} />
         </Col>
       </Row>
       <Row>
-        <Col sm={7}>
-          <AddQuestionComponent onAddQuestion={(q) => addQuestionToStore(q)} />
-        </Col>
-        <Col sm={5}>
-          <ol>{myQuestions}</ol>
-        </Col>
+        <Col>{myQuestions}</Col>
       </Row>
     </Container>
   );

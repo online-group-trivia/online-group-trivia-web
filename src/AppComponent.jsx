@@ -13,15 +13,17 @@ function Inner(params) {
   let query = new URLSearchParams(useLocation().search);
   return (
     <Switch>
-      <Route exact path="/">
-        <HomeComponent />
-      </Route>
-      <Route path="/manage">
-        <ManageComponent gameId={query.get("gameId")} />
-      </Route>
-      <Route path="/play">
-        <GameComponent />
-      </Route>
+      <div style={{ "margin-top": "100px" }}>
+        <Route exact path="/">
+          <HomeComponent />
+        </Route>
+        <Route path="/manage">
+          <ManageComponent gameId={query.get("gameId")} />
+        </Route>
+        <Route path="/play">
+          <GameComponent />
+        </Route>
+      </div>
     </Switch>
   );
 }
