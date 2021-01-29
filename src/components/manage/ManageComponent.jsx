@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import LoadingScreenComponent from "../LoadingScreenComponent";
 import ServerErrorMessageComponent from "../ServerErrorMessageComponent";
 import EditableLabel from "react-inline-editing";
+import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -16,6 +17,7 @@ import {
   selectTitle,
   selectQuestions,
   setInitialState,
+  selectgameId,
 } from "./manageSlice";
 import React, { useState, useEffect } from "react";
 export function ManageComponent(props) {
@@ -23,62 +25,74 @@ export function ManageComponent(props) {
   const dispatch = useDispatch();
 
   const title = useSelector(selectTitle);
+  const gameId = useSelector(selectgameId);
   const questions = useSelector(selectQuestions);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(getGameDataFromServer, []);
 
   function changeTitleInStore(text) {
-    dispatch(changeTitle());
+    saveOnServer({
+      ChangeTitle: {
+        title: text,
+      },
+    }).then(() => dispatch(changeTitle(text)));
     console.log("Left editor with text: " + text);
   }
 
   function addQuestionToStore(questionStr) {
     console.log("Got question: " + questionStr);
-    dispatch(addQuestion(questionStr));
+    let tempSet = new Set(questions);
+    if (!tempSet.has(questionStr)) {
+      saveOnServer({
+        AddQuestion: {
+          question: questionStr,
+        },
+      }).then(() => dispatch(addQuestion(questionStr)));
+    }
+  }
+
+  async function saveOnServer(data) {
+    await axios.put(
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?gameId=${gameId}`,
+      data
+    );
   }
 
   function getGameDataFromServer() {
-    const myHeaders = new Headers({});
-    const myRequest = new Request(
-      `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?gameId=${props.gameId}`,
-      {
-        method: "GET",
-        headers: myHeaders,
-        mode: "cors",
-        cache: "default",
-      }
-    );
-
-    return fetch(myRequest)
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?gameId=${props.gameId}`
+      )
       .then((response) => {
-        if (!response.ok) {
-          setRequestStatus(response.status);
-          return;
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data === undefined) {
+        if (response.data === undefined) {
           return;
         }
         dispatch(
           setInitialState({
-            title: data["title"],
+            title: response.data["title"],
             gameId: props.gameId,
-            questions: data["questions"],
+            questions: response.data["questions"],
           })
         );
         setRequestStatus("OK");
         document.title = "Group Trivia | " + title;
       })
-      .catch((err) => {
-        setRequestStatus("Server unreachable");
-        return console.log(err);
+      .catch((error) => {
+        if (error.response) {
+          setRequestStatus(error.response.status);
+        } else if (error.request) {
+          setRequestStatus("Server unreachable");
+        }
       });
   }
-  function removeQuestionToStore(question) {
+
+  function removeQuestionFromStore(question) {
+    saveOnServer({
+      RemoveQuestion: {
+        question: question,
+      },
+    }).then(() => dispatch(removeQuestion(question)));
     console.log("Removing question: " + question);
-    dispatch(removeQuestion(question));
   }
 
   if (requestStatus === undefined) {
@@ -90,7 +104,7 @@ export function ManageComponent(props) {
   const myQuestions = questions.slice().map((question) => {
     return (
       <QuestionComponent
-        onRemoveQuestion={(question) => removeQuestionToStore(question)}
+        onRemoveQuestion={(question) => removeQuestionFromStore(question)}
         key={question}
         question={question}
       ></QuestionComponent>
@@ -106,10 +120,12 @@ export function ManageComponent(props) {
               text={title}
               inputWidth="500px"
               inputHeight="50px"
-              inputMaxLength="50"
+              inputMaxLength={50}
               labelFontWeight="bold"
               inputFontWeight="bold"
-              onFocusOut={() => changeTitleInStore()}
+              onFocusOut={(textAfterChange) =>
+                changeTitleInStore(textAfterChange)
+              }
             />
           </h1>
         </Col>
