@@ -26,7 +26,9 @@ export class QuestionComponent extends React.Component {
             >
               X
             </Button>
-            <div className="text-wrap">{this.props.question}</div>
+            <div className="text-wrap" style={{ wordBreak: "break-all" }}>
+              {this.props.question}
+            </div>
           </Media>
         </Badge>
       </h1>

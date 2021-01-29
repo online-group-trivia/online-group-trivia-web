@@ -20,6 +20,7 @@ import {
   selectgameId,
 } from "./manageSlice";
 import React, { useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
 export function ManageComponent(props) {
   const [requestStatus, setRequestStatus] = useState(undefined);
   const dispatch = useDispatch();
@@ -37,6 +38,18 @@ export function ManageComponent(props) {
       },
     }).then(() => dispatch(changeTitle(text)));
     console.log("Left editor with text: " + text);
+  }
+
+  function startGame() {
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/start`, `"${gameId}"`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      });
   }
 
   function addQuestionToStore(questionStr) {
@@ -112,7 +125,7 @@ export function ManageComponent(props) {
   });
 
   return (
-    <Container>
+    <Container style={{ marginTop: "100px" }}>
       <Row className="justify-content-md-center">
         <h1>
           <EditableLabel
@@ -128,9 +141,14 @@ export function ManageComponent(props) {
           />
         </h1>
       </Row>
-      <Row>
-        <Col>
+      <Row className="justify-content-md-center">
+        <Col sm={8}>
           <AddQuestionComponent onAddQuestion={(q) => addQuestionToStore(q)} />
+        </Col>
+        <Col>
+          <Button variant="primary" onClick={() => startGame()}>
+            Start Game
+          </Button>
         </Col>
       </Row>
       <Row>
