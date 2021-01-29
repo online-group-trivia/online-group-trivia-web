@@ -8,8 +8,13 @@ import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import { useState } from "react";
 
 function HomeComponent(props) {
+  const [roomId, setRoomId] = useState("");
+  const onRoomId = ({ target: { value } }) => setRoomId(value);
+  const [displayName, setDisplayName] = useState("");
+  const onDisplayName = ({ target: { value } }) => setDisplayName(value);
   const history = useHistory();
   const createGame = () => {
     axios
@@ -23,6 +28,17 @@ function HomeComponent(props) {
       });
   };
 
+  function joinRoom() {
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/join`, {
+        id: roomId,
+        displayName: displayName,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  }
+
   return (
     <Jumbotron className="white-background d-flex align-items-center min-vh-100">
       <Container className="text-center overflow-hidden">
@@ -33,23 +49,24 @@ function HomeComponent(props) {
         </Row>
         <Row className="justify-content-center p-3">
           <Form.Group as={Col} sm={4}>
-            <Form.Control type="text" placeholder="Room ID" name="game id" />
+            <Form.Control
+              type="text"
+              placeholder="Room ID"
+              name="game id"
+              onChange={onRoomId}
+            />
             <br />
             <Form.Control
               type="text"
               placeholder="Your Nickname"
               name="nickname"
+              onChange={onDisplayName}
             />
           </Form.Group>
-          {/* <Col sm className="my-auto p-3">
-            <Button variant="primary" block>
-              Connect
-            </Button>
-          </Col> */}
         </Row>
         <Row className="justify-content-center">
           <Col sm={2}>
-            <Button variant="primary" block>
+            <Button variant="primary" block onClick={() => joinRoom()}>
               Join a Room
             </Button>
           </Col>
