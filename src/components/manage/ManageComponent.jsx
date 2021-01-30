@@ -18,7 +18,8 @@ import {
   selectQuestions,
   setInitialState,
   selectgameId,
-} from "./manageSlice";
+  startTest,
+} from "../../reducers/reducers";
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 export function ManageComponent(props) {
@@ -41,15 +42,16 @@ export function ManageComponent(props) {
   }
 
   function startGame() {
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/start`, `"${gameId}"`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-      });
+    dispatch(startTest());
+    // axios
+    //   .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/start`, `"${gameId}"`, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //   });
   }
 
   function addQuestionToStore(questionStr) {
