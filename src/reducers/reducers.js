@@ -1,8 +1,6 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 
 export const addQuestion = createAction("manage/addQuestion");
-export const test = createAction("manage/test");
-export const testSuccess = createAction("manage/test_SUCCESS");
 export const removeQuestion = createAction("manage/removeQuestion");
 export const changeTitle = createAction("manage/changeTitle");
 export const setInitialState = createAction("manage/setInitialState");
@@ -17,12 +15,6 @@ export const manageReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(addQuestion, (state, action) => {
       state.questions.push(action.payload);
-    })
-    .addCase(test, (state, action) => {
-      state.questions = [];
-    })
-    .addCase(testSuccess, (state, action) => {
-      console.log("asjdlkajsd");
     })
     .addCase(removeQuestion, (state, action) => {
       let tempSet = new Set(state.questions);
@@ -39,14 +31,15 @@ export const manageReducer = createReducer(initialState, (builder) => {
     });
 });
 
-export function startTest() {
+export function startGameAxios(gameId) {
   return {
-    type: "manage/test",
+    type: "manage/startGame",
     payload: {
       request: {
-        client: "default",
-        method: "GET",
-        url: "/hi",
+        method: "POST",
+        data: `"${gameId}"`,
+        url: "/start",
+        headers: { "Content-Type": "application/json" },
       },
     },
     onSuccess: () => console.log("success!"),
