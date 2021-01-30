@@ -29,30 +29,27 @@ export class AddQuestionComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <label htmlFor="questionForm-url">Please enter your question:</label>
-        <InputGroup>
-          <FormControl
-            ref={(questionInput) => {
-              this.questionInput = questionInput;
-            }}
-            id="questionForm"
-            placeholder="How many dogs does John have?"
-            onChange={this.handleChange}
-            value={this.state.value}
-            onKeyPress={this.handleKeyPress}
-          />
-          <InputGroup.Append>
-            <Button
-              variant="primary"
-              onClick={this.handleAdd}
-              disabled={!this.state.value}
-            >
-              Add
-            </Button>
-          </InputGroup.Append>
-        </InputGroup>
-      </div>
+      <InputGroup>
+        <FormControl
+          ref={(questionInput) => {
+            this.questionInput = questionInput;
+          }}
+          id="questionForm"
+          placeholder="How many dogs does John have?"
+          onChange={this.handleChange}
+          value={this.state.value}
+          onKeyPress={this.handleKeyPress}
+        />
+        <InputGroup.Append>
+          <Button
+            variant="primary"
+            onClick={this.handleAdd}
+            disabled={!this.state.value}
+          >
+            Add
+          </Button>
+        </InputGroup.Append>
+      </InputGroup>
     );
   }
 }

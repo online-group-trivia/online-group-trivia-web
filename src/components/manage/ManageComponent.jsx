@@ -20,6 +20,7 @@ import {
   selectgameId,
 } from "./manageSlice";
 import React, { useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
 export function ManageComponent(props) {
   const [requestStatus, setRequestStatus] = useState(undefined);
   const dispatch = useDispatch();
@@ -37,6 +38,18 @@ export function ManageComponent(props) {
       },
     }).then(() => dispatch(changeTitle(text)));
     console.log("Left editor with text: " + text);
+  }
+
+  function startGame() {
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/start`, `"${gameId}"`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      });
   }
 
   function addQuestionToStore(questionStr) {
@@ -112,31 +125,34 @@ export function ManageComponent(props) {
   });
 
   return (
-    <Container>
-      <Row>
+    <Container style={{ marginTop: "100px" }}>
+      <Row className="justify-content-md-center">
+        <h1>
+          <EditableLabel
+            text={title}
+            inputWidth="500px"
+            inputHeight="50px"
+            inputMaxLength={50}
+            labelFontWeight="bold"
+            inputFontWeight="bold"
+            onFocusOut={(textAfterChange) =>
+              changeTitleInStore(textAfterChange)
+            }
+          />
+        </h1>
+      </Row>
+      <Row className="justify-content-md-center">
+        <Col sm={8}>
+          <AddQuestionComponent onAddQuestion={(q) => addQuestionToStore(q)} />
+        </Col>
         <Col>
-          <h1>
-            <EditableLabel
-              text={title}
-              inputWidth="500px"
-              inputHeight="50px"
-              inputMaxLength={50}
-              labelFontWeight="bold"
-              inputFontWeight="bold"
-              onFocusOut={(textAfterChange) =>
-                changeTitleInStore(textAfterChange)
-              }
-            />
-          </h1>
+          <Button variant="primary" onClick={() => startGame()}>
+            Start Game
+          </Button>
         </Col>
       </Row>
       <Row>
-        <Col sm={7}>
-          <AddQuestionComponent onAddQuestion={(q) => addQuestionToStore(q)} />
-        </Col>
-        <Col sm={5}>
-          <ol>{myQuestions}</ol>
-        </Col>
+        <Col>{myQuestions}</Col>
       </Row>
     </Container>
   );
