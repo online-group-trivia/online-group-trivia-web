@@ -18,13 +18,13 @@ import {
   selectQuestions,
   setInitialState,
   selectgameId,
-} from "./manageSlice";
+  startGameAxios,
+} from "../../reducers/reducers";
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 export function ManageComponent(props) {
   const [requestStatus, setRequestStatus] = useState(undefined);
   const dispatch = useDispatch();
-
   const title = useSelector(selectTitle);
   const gameId = useSelector(selectgameId);
   const questions = useSelector(selectQuestions);
@@ -41,15 +41,7 @@ export function ManageComponent(props) {
   }
 
   function startGame() {
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/start`, `"${gameId}"`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-      });
+    dispatch(startGameAxios(gameId));
   }
 
   function addQuestionToStore(questionStr) {
