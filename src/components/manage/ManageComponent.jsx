@@ -9,25 +9,21 @@ import ServerErrorMessageComponent from "../ServerErrorMessageComponent";
 import EditableLabel from "react-inline-editing";
 import axios from "axios";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import {
   addQuestion,
   removeQuestion,
   changeTitle,
-  selectTitle,
-  selectQuestions,
-  setInitialState,
-  selectgameId,
+  getGameDataAxios,
   startGameAxios,
-} from "../../reducers/reducers";
-import React, { useState, useEffect } from "react";
+} from "../../reducers/homeReducer";
+
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
+
 export function ManageComponent(props) {
-  const [requestStatus, setRequestStatus] = useState(undefined);
   const dispatch = useDispatch();
-  const title = useSelector(selectTitle);
-  const gameId = useSelector(selectgameId);
-  const questions = useSelector(selectQuestions);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(getGameDataFromServer, []);
 
@@ -41,12 +37,12 @@ export function ManageComponent(props) {
   }
 
   function startGame() {
-    dispatch(startGameAxios(gameId));
+    dispatch(startGameAxios(props.gameId));
   }
 
   function addQuestionToStore(questionStr) {
     console.log("Got question: " + questionStr);
-    let tempSet = new Set(questions);
+    let tempSet = new Set(props.questions);
     if (!tempSet.has(questionStr)) {
       saveOnServer({
         AddQuestion: {
@@ -58,37 +54,16 @@ export function ManageComponent(props) {
 
   async function saveOnServer(data) {
     await axios.put(
-      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?gameId=${gameId}`,
+      `${process.env.REACT_APP_BACKEND_HOSTNAME}/save?gameId=${props.gameId}`,
       data
     );
   }
 
   function getGameDataFromServer() {
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_HOSTNAME}/manage?gameId=${props.gameId}`
-      )
-      .then((response) => {
-        if (response.data === undefined) {
-          return;
-        }
-        dispatch(
-          setInitialState({
-            title: response.data["title"],
-            gameId: props.gameId,
-            questions: response.data["questions"],
-          })
-        );
-        setRequestStatus("OK");
-        document.title = "Group Trivia | " + title;
-      })
-      .catch((error) => {
-        if (error.response) {
-          setRequestStatus(error.response.status);
-        } else if (error.request) {
-          setRequestStatus("Server unreachable");
-        }
-      });
+    if (props.hasData) {
+      return;
+    }
+    dispatch(getGameDataAxios(props.gameId));
   }
 
   function removeQuestionFromStore(question) {
@@ -100,13 +75,14 @@ export function ManageComponent(props) {
     console.log("Removing question: " + question);
   }
 
-  if (requestStatus === undefined) {
+  console.log(props);
+  if (props.gameDataStatus === undefined) {
     return <LoadingScreenComponent />;
   }
-  if (requestStatus !== "OK") {
-    return <ServerErrorMessageComponent msg={requestStatus} />;
+  if (props.gameDataStatus !== "OK") {
+    return <ServerErrorMessageComponent msg={props.gameDataStatus} />;
   }
-  const myQuestions = questions.slice().map((question) => {
+  const myQuestions = props.questions.slice().map((question) => {
     return (
       <QuestionComponent
         onRemoveQuestion={(question) => removeQuestionFromStore(question)}
@@ -121,7 +97,7 @@ export function ManageComponent(props) {
       <Row className="justify-content-md-center">
         <h1>
           <EditableLabel
-            text={title}
+            text={props.title}
             inputWidth="500px"
             inputHeight="50px"
             inputMaxLength={50}
@@ -150,4 +126,13 @@ export function ManageComponent(props) {
   );
 }
 
-export default ManageComponent;
+const mapStateToProps = (state) => {
+  return {
+    hasData: state.home.hasData,
+    questions: state.home.questions,
+    title: state.home.title,
+    gameDataStatus: state.home.gameDataStatus,
+  };
+};
+
+export default connect(mapStateToProps)(ManageComponent);

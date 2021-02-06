@@ -1,4 +1,3 @@
-import React from "react";
 import "./HomeComponent.css";
 import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -7,26 +6,22 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Form from "react-bootstrap/Form";
+import { useDispatch, connect } from "react-redux";
+import { React, useState, useEffect } from "react";
 import axios from "axios";
-import { useState } from "react";
+import { createGameAxios } from "../reducers/homeReducer";
 
 function HomeComponent(props) {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [roomId, setRoomId] = useState("");
   const onRoomId = ({ target: { value } }) => setRoomId(value);
   const [displayName, setDisplayName] = useState("");
   const onDisplayName = ({ target: { value } }) => setDisplayName(value);
-  const history = useHistory();
-  const createGame = () => {
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_HOSTNAME}/create`, {
-        title: "My new trivia game!",
-      })
-      .then((response) => {
-        let id = response.data["_id"];
-        console.log(id);
-        history.push(`/manage?gameId=${id}`);
-      });
-  };
+
+  function createGame() {
+    dispatch(createGameAxios("My new trivia game!"));
+  }
 
   function joinRoom() {
     axios
@@ -38,6 +33,12 @@ function HomeComponent(props) {
         console.log(response);
       });
   }
+
+  useEffect(() => {
+    if (props.hasData) {
+      history.push("/manage?gameId=" + props.gameId);
+    }
+  });
 
   return (
     <Jumbotron className="white-background d-flex align-items-center min-vh-100">
@@ -73,7 +74,7 @@ function HomeComponent(props) {
         </Row>
         <Row className="justify-content-center">
           <Col sm={3}>
-            <Button variant="yardena" block onClick={createGame}>
+            <Button variant="yardena" block onClick={() => createGame()}>
               or, Create a New Game
             </Button>
           </Col>
@@ -83,4 +84,9 @@ function HomeComponent(props) {
   );
 }
 
-export default HomeComponent;
+const mapStateToProps = (state) => {
+  console.log(state);
+  return { hasData: state.home.hasData, gameId: state.home.gameId };
+};
+
+export default connect(mapStateToProps)(HomeComponent);
